@@ -65,68 +65,82 @@ class _CategoryTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: 160,
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
-          colors: _gradients[index % _gradients.length],
+    return TweenAnimationBuilder<double>(
+      tween: Tween<double>(begin: 0.98, end: 1),
+      duration: Duration(milliseconds: 260 + (index * 80)),
+      curve: Curves.easeOutCubic,
+      builder: (BuildContext context, double value, Widget? child) {
+        return Opacity(
+          opacity: value,
+          child: Transform.translate(
+            offset: Offset(0, (1 - value) * 18),
+            child: child,
+          ),
+        );
+      },
+      child: Container(
+        width: 160,
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: _gradients[index % _gradients.length],
+          ),
+          borderRadius: BorderRadius.circular(20),
+          border: Border.all(color: Colors.white.withOpacity(0.15)),
         ),
-        borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: Colors.white.withOpacity(0.15)),
-      ),
-      child: Padding(
-        padding: const EdgeInsets.fromLTRB(14, 16, 14, 12),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: <Widget>[
-            Text(
-              category.title,
-              style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                    fontWeight: FontWeight.w500,
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(14, 16, 14, 12),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: <Widget>[
+              Text(
+                category.title,
+                style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                      fontWeight: FontWeight.w500,
+                    ),
+              ),
+              const SizedBox(height: 4),
+              Text(
+                category.subtitle,
+                style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                      fontWeight: FontWeight.w700,
+                    ),
+              ),
+              const SizedBox(height: 12),
+              Row(
+                children: <Widget>[
+                  Icon(
+                    Icons.access_time_rounded,
+                    size: 14,
+                    color: Colors.white.withOpacity(0.75),
                   ),
-            ),
-            const SizedBox(height: 4),
-            Text(
-              category.subtitle,
-              style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                    fontWeight: FontWeight.w700,
+                  const SizedBox(width: 4),
+                  Text(
+                    category.duration,
+                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                          color: Colors.white.withOpacity(0.75),
+                        ),
                   ),
-            ),
-            const SizedBox(height: 12),
-            Row(
-              children: <Widget>[
-                Icon(
-                  Icons.access_time_rounded,
-                  size: 14,
-                  color: Colors.white.withOpacity(0.75),
-                ),
-                const SizedBox(width: 4),
-                Text(
-                  category.duration,
-                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                        color: Colors.white.withOpacity(0.75),
-                      ),
-                ),
-                const Spacer(),
-                Container(
-                  width: 28,
-                  height: 28,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: Colors.white.withOpacity(0.18),
+                  const Spacer(),
+                  Container(
+                    width: 28,
+                    height: 28,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: Colors.white.withOpacity(0.18),
+                    ),
+                    child: const Icon(
+                      Icons.play_arrow_rounded,
+                      size: 18,
+                      color: Colors.white,
+                    ),
                   ),
-                  child: const Icon(
-                    Icons.play_arrow_rounded,
-                    size: 18,
-                    color: Colors.white,
-                  ),
-                ),
-              ],
-            ),
-          ],
+                ],
+              ),
+            ],
+          ),
         ),
       ),
     );

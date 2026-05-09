@@ -5,6 +5,9 @@ import '../../domain/meditation_category.dart';
 import '../../domain/mood.dart';
 import '../../../../shared/widgets/ambient_background.dart';
 import '../widgets/affirmation_card.dart';
+import '../widgets/emotional_greeting_header.dart';
+import '../widgets/featured_session_section.dart';
+import '../widgets/floating_mini_player.dart';
 import '../widgets/luxury_bottom_nav.dart';
 import '../widgets/meditation_categories.dart';
 import '../widgets/mood_selector.dart';
@@ -38,6 +41,26 @@ class _HomeScreenState extends State<HomeScreen>
         title: l10n.categoryHypnosisTitle,
         subtitle: l10n.categoryHypnosisSubtitle,
         duration: '15 min',
+      ),
+    ];
+  }
+
+  List<MeditationCategory> _nightCategories(AppLocalizations l10n) {
+    return <MeditationCategory>[
+      MeditationCategory(
+        title: l10n.nightFlowTitleOne,
+        subtitle: l10n.nightFlowSubtitleOne,
+        duration: '12 min',
+      ),
+      MeditationCategory(
+        title: l10n.nightFlowTitleTwo,
+        subtitle: l10n.nightFlowSubtitleTwo,
+        duration: '9 min',
+      ),
+      MeditationCategory(
+        title: l10n.nightFlowTitleThree,
+        subtitle: l10n.nightFlowSubtitleThree,
+        duration: '14 min',
       ),
     ];
   }
@@ -87,6 +110,7 @@ class _HomeScreenState extends State<HomeScreen>
     final double maxContentWidth = tabletPlus ? 920 : 680;
     final List<String> affirmations = _affirmations(l10n);
     final List<MeditationCategory> categories = _categories(l10n);
+    final List<MeditationCategory> nightCategories = _nightCategories(l10n);
     final int affirmationIndex = _selectedMood.index % affirmations.length;
 
     return Scaffold(
@@ -99,64 +123,80 @@ class _HomeScreenState extends State<HomeScreen>
         favoritesLabel: l10n.navFavorites,
         profileLabel: l10n.navProfile,
       ),
-      body: AmbientBackground(
-        child: SafeArea(
-          child: Center(
-            child: ConstrainedBox(
-              constraints: BoxConstraints(maxWidth: maxContentWidth),
-              child: FadeTransition(
-                opacity:
-                    CurvedAnimation(parent: _controller, curve: Curves.easeOut),
-                child: ListView(
-                  padding: const EdgeInsets.fromLTRB(20, 20, 20, 110),
-                  children: <Widget>[
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: const <Widget>[
-                        Icon(Icons.menu_rounded, color: Colors.white70),
-                        Icon(Icons.notifications_none_rounded,
-                            color: Colors.white70),
+      body: Stack(
+        children: <Widget>[
+          AmbientBackground(
+            child: SafeArea(
+              child: Center(
+                child: ConstrainedBox(
+                  constraints: BoxConstraints(maxWidth: maxContentWidth),
+                  child: FadeTransition(
+                    opacity: CurvedAnimation(
+                      parent: _controller,
+                      curve: Curves.easeOut,
+                    ),
+                    child: ListView(
+                      padding: const EdgeInsets.fromLTRB(20, 20, 20, 220),
+                      children: <Widget>[
+                        EmotionalGreetingHeader(
+                          greeting: l10n.homeGreeting,
+                          subtitle: l10n.homeSubtitle,
+                        ),
+                        const SizedBox(height: 18),
+                        MoodSelector(
+                          selectedMood: _selectedMood,
+                          moodLabelBuilder: (Mood mood) =>
+                              _moodLabel(l10n, mood),
+                          onChanged: (Mood mood) =>
+                              setState(() => _selectedMood = mood),
+                        ),
+                        const SizedBox(height: 14),
+                        AnimatedSwitcher(
+                          duration: const Duration(milliseconds: 320),
+                          child: DailyAffirmationCard(
+                            key: ValueKey<String>(
+                                affirmations[affirmationIndex]),
+                            title: l10n.affirmationCardTitle,
+                            message: affirmations[affirmationIndex],
+                            actionLabel: l10n.affirmationAction,
+                          ),
+                        ),
+                        const SizedBox(height: 14),
+                        MeditationCategories(
+                          title: l10n.meditationCategoriesTitle,
+                          viewAllLabel: l10n.viewAll,
+                          categories: categories,
+                        ),
+                        const SizedBox(height: 18),
+                        FeaturedSessionSection(
+                          title: l10n.featuredSessionTitle,
+                          sessionTitle: l10n.featuredSessionName,
+                          sessionMeta: l10n.featuredSessionMeta,
+                          actionLabel: l10n.featuredSessionAction,
+                        ),
+                        const SizedBox(height: 18),
+                        MeditationCategories(
+                          title: l10n.nightFlowSectionTitle,
+                          viewAllLabel: l10n.viewAll,
+                          categories: nightCategories,
+                        ),
                       ],
                     ),
-                    const SizedBox(height: 24),
-                    Text(
-                      l10n.homeGreeting,
-                      style: Theme.of(context).textTheme.headlineMedium,
-                    ),
-                    const SizedBox(height: 6),
-                    Text(
-                      l10n.moodSelectorTitle,
-                      style: Theme.of(context).textTheme.bodyMedium,
-                    ),
-                    const SizedBox(height: 18),
-                    MoodSelector(
-                      selectedMood: _selectedMood,
-                      moodLabelBuilder: (Mood mood) => _moodLabel(l10n, mood),
-                      onChanged: (Mood mood) =>
-                          setState(() => _selectedMood = mood),
-                    ),
-                    const SizedBox(height: 14),
-                    AnimatedSwitcher(
-                      duration: const Duration(milliseconds: 320),
-                      child: DailyAffirmationCard(
-                        key: ValueKey<String>(affirmations[affirmationIndex]),
-                        title: l10n.affirmationCardTitle,
-                        message: affirmations[affirmationIndex],
-                        actionLabel: l10n.affirmationAction,
-                      ),
-                    ),
-                    const SizedBox(height: 14),
-                    MeditationCategories(
-                      title: l10n.meditationCategoriesTitle,
-                      viewAllLabel: l10n.viewAll,
-                      categories: categories,
-                    ),
-                  ],
+                  ),
                 ),
               ),
             ),
           ),
-        ),
+          Positioned(
+            left: 18,
+            right: 18,
+            bottom: 90,
+            child: FloatingMiniPlayer(
+              title: l10n.playerNowPlayingTitle,
+              subtitle: l10n.playerNowPlayingSubtitle,
+            ),
+          ),
+        ],
       ),
     );
   }
