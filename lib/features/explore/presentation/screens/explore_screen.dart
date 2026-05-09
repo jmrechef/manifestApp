@@ -129,7 +129,18 @@ class _ExploreScreenState extends State<ExploreScreen> {
                         duration: item.duration,
                         isPremium: item.isPremium,
                         gradient: item.gradient,
-                        onTap: () => context.go(AppRoutes.contentDetail),
+                        onTap: () {
+                          final Uri uri = Uri(
+                            path: AppRoutes.contentDetail,
+                            queryParameters: <String, String>{
+                              'title': item.title,
+                              'category': item.category,
+                              'duration': item.duration,
+                              'isPremium': item.isPremium.toString(),
+                            },
+                          );
+                          context.go(uri.toString());
+                        },
                       );
                     },
                   ),

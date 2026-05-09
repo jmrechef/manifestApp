@@ -26,7 +26,16 @@ GoRouter buildAppRouter() {
       ),
       GoRoute(
         path: AppRoutes.contentDetail,
-        builder: (_, __) => const ContentDetailScreen(),
+        builder: (_, GoRouterState state) {
+          final Map<String, String> query =
+              Uri.parse(state.location).queryParameters;
+          return ContentDetailScreen(
+            title: query['title'] ?? 'Untitled session',
+            category: query['category'] ?? 'Meditations',
+            duration: query['duration'] ?? '10 min',
+            isPremium: (query['isPremium'] ?? 'false').toLowerCase() == 'true',
+          );
+        },
       ),
       GoRoute(
         path: AppRoutes.player,
