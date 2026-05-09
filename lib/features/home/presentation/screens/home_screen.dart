@@ -3,8 +3,8 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../../domain/meditation_category.dart';
 import '../../domain/mood.dart';
+import '../../../../shared/widgets/ambient_background.dart';
 import '../widgets/affirmation_card.dart';
-import '../widgets/ambient_background.dart';
 import '../widgets/luxury_bottom_nav.dart';
 import '../widgets/meditation_categories.dart';
 import '../widgets/mood_selector.dart';

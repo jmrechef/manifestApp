@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
 import '../../../../core/theme/app_colors.dart';
+import '../../../../shared/widgets/glass_card.dart';
 import '../../domain/mood.dart';
-import 'glass_card.dart';
 
 class MoodSelector extends StatelessWidget {
   const MoodSelector({

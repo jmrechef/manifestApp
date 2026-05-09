@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../../core/theme/app_colors.dart';
-import 'glass_card.dart';
+import '../../../../shared/widgets/glass_card.dart';
 
 class DailyAffirmationCard extends StatelessWidget {
   const DailyAffirmationCard({
