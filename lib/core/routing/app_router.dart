@@ -1,0 +1,41 @@
+import 'package:go_router/go_router.dart';
+
+import '../../features/content_detail/presentation/screens/content_detail_screen.dart';
+import '../../features/explore/presentation/screens/explore_screen.dart';
+import '../../features/home/presentation/screens/home_screen.dart';
+import '../../features/player/presentation/screens/player_screen.dart';
+import '../../features/profile/presentation/screens/profile_screen.dart';
+import '../../features/welcome/presentation/screens/welcome_screen.dart';
+import 'app_routes.dart';
+
+GoRouter buildAppRouter() {
+  return GoRouter(
+    initialLocation: AppRoutes.welcome,
+    routes: <RouteBase>[
+      GoRoute(
+        path: AppRoutes.welcome,
+        builder: (_, __) => const WelcomeScreen(),
+      ),
+      GoRoute(
+        path: AppRoutes.home,
+        builder: (_, __) => const HomeScreen(),
+      ),
+      GoRoute(
+        path: AppRoutes.explore,
+        builder: (_, __) => const ExploreScreen(),
+      ),
+      GoRoute(
+        path: AppRoutes.contentDetail,
+        builder: (_, __) => const ContentDetailScreen(),
+      ),
+      GoRoute(
+        path: AppRoutes.player,
+        builder: (_, __) => const PlayerScreen(),
+      ),
+      GoRoute(
+        path: AppRoutes.profile,
+        builder: (_, __) => const ProfileScreen(),
+      ),
+    ],
+  );
+}
