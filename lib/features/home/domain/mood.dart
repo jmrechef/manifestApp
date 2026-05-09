@@ -1,1 +1,1 @@
-enum Mood { calm, focused, grateful, confident }
+enum Mood { great, good, neutral, tired, anxious }

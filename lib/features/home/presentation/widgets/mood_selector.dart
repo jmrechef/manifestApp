@@ -9,67 +9,105 @@ class MoodSelector extends StatelessWidget {
     super.key,
     required this.selectedMood,
     required this.onChanged,
-    required this.title,
     required this.moodLabelBuilder,
-    required this.moodDescriptionBuilder,
   });
 
   final Mood selectedMood;
   final ValueChanged<Mood> onChanged;
-  final String title;
   final String Function(Mood mood) moodLabelBuilder;
-  final String Function(Mood mood) moodDescriptionBuilder;
+
+  String _emoji(Mood mood) {
+    switch (mood) {
+      case Mood.great:
+        return '😊';
+      case Mood.good:
+        return '🙂';
+      case Mood.neutral:
+        return '😐';
+      case Mood.tired:
+        return '😞';
+      case Mood.anxious:
+        return '😣';
+    }
+  }
+
+  Color _accent(Mood mood) {
+    switch (mood) {
+      case Mood.great:
+        return const Color(0xFFF6B44F);
+      case Mood.good:
+        return const Color(0xFF59D0D3);
+      case Mood.neutral:
+        return const Color(0xFFE6A36A);
+      case Mood.tired:
+        return const Color(0xFFDF77B8);
+      case Mood.anxious:
+        return const Color(0xFFE8688D);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return GlassCard(
+      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          Text(title, style: Theme.of(context).textTheme.titleLarge),
-          const SizedBox(height: 16),
-          Wrap(
-            spacing: 10,
-            runSpacing: 10,
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: Mood.values.map((Mood mood) {
               final bool isSelected = selectedMood == mood;
-              return AnimatedContainer(
-                duration: const Duration(milliseconds: 260),
-                curve: Curves.easeOutCubic,
-                child: ChoiceChip(
-                  label: Text(moodLabelBuilder(mood)),
-                  selected: isSelected,
-                  onSelected: (_) => onChanged(mood),
-                  selectedColor: AppColors.accent.withOpacity(0.35),
-                  backgroundColor: AppColors.surface.withOpacity(0.65),
-                  labelStyle: TextStyle(
-                    color: isSelected
-                        ? AppColors.textPrimary
-                        : AppColors.textSecondary,
-                    fontWeight: isSelected ? FontWeight.w600 : FontWeight.w500,
-                  ),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(20),
-                    side: BorderSide(
-                      color: isSelected
-                          ? AppColors.accent.withOpacity(0.8)
-                          : AppColors.glassStroke,
-                    ),
+              final Color accent = _accent(mood);
+              return GestureDetector(
+                onTap: () => onChanged(mood),
+                child: SizedBox(
+                  width: 62,
+                  child: Column(
+                    children: <Widget>[
+                      AnimatedContainer(
+                        duration: const Duration(milliseconds: 200),
+                        width: 48,
+                        height: 48,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: accent.withOpacity(isSelected ? 0.95 : 0.80),
+                          border: Border.all(
+                            color: isSelected
+                                ? Colors.white.withOpacity(0.82)
+                                : Colors.white.withOpacity(0.18),
+                          ),
+                          boxShadow: <BoxShadow>[
+                            BoxShadow(
+                              color:
+                                  accent.withOpacity(isSelected ? 0.55 : 0.22),
+                              blurRadius: isSelected ? 16 : 8,
+                            ),
+                          ],
+                        ),
+                        child: Center(
+                          child: Text(
+                            _emoji(mood),
+                            style: const TextStyle(fontSize: 24),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 8),
+                      Text(
+                        moodLabelBuilder(mood),
+                        textAlign: TextAlign.center,
+                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                              color: AppColors.textPrimary
+                                  .withOpacity(isSelected ? 0.98 : 0.88),
+                              fontWeight: isSelected
+                                  ? FontWeight.w600
+                                  : FontWeight.w500,
+                            ),
+                      ),
+                    ],
                   ),
                 ),
               );
             }).toList(),
-          ),
-          const SizedBox(height: 14),
-          AnimatedSwitcher(
-            duration: const Duration(milliseconds: 320),
-            switchInCurve: Curves.easeOutCubic,
-            switchOutCurve: Curves.easeInCubic,
-            child: Text(
-              moodDescriptionBuilder(selectedMood),
-              key: ValueKey<String>(selectedMood.name),
-              style: Theme.of(context).textTheme.bodyMedium,
-            ),
           ),
         ],
       ),

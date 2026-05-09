@@ -20,39 +20,24 @@ class _HomeScreenState extends State<HomeScreen>
     with SingleTickerProviderStateMixin {
   late final AnimationController _controller;
   int _navIndex = 0;
-  Mood _selectedMood = Mood.calm;
+  Mood _selectedMood = Mood.great;
 
   List<MeditationCategory> _categories(AppLocalizations l10n) {
     return <MeditationCategory>[
       MeditationCategory(
-        title: l10n.categoryBreathwork,
-        icon: Icons.air_rounded,
-        duration: '8 min',
-      ),
-      MeditationCategory(
-        title: l10n.categorySleepReset,
-        icon: Icons.nightlight_round,
-        duration: '14 min',
-      ),
-      MeditationCategory(
-        title: l10n.categoryAbundance,
-        icon: Icons.spa_rounded,
+        title: l10n.categoryMeditationTitle,
+        subtitle: l10n.categoryMeditationSubtitle,
         duration: '10 min',
       ),
       MeditationCategory(
-        title: l10n.categoryConfidence,
-        icon: Icons.bolt_rounded,
-        duration: '7 min',
+        title: l10n.categoryExerciseTitle,
+        subtitle: l10n.categoryExerciseSubtitle,
+        duration: '8 min',
       ),
       MeditationCategory(
-        title: l10n.categoryStressRelief,
-        icon: Icons.waves_rounded,
-        duration: '12 min',
-      ),
-      MeditationCategory(
-        title: l10n.categoryFocus,
-        icon: Icons.center_focus_strong_rounded,
-        duration: '9 min',
+        title: l10n.categoryHypnosisTitle,
+        subtitle: l10n.categoryHypnosisSubtitle,
+        duration: '15 min',
       ),
     ];
   }
@@ -67,27 +52,16 @@ class _HomeScreenState extends State<HomeScreen>
 
   String _moodLabel(AppLocalizations l10n, Mood mood) {
     switch (mood) {
-      case Mood.calm:
-        return l10n.moodCalmLabel;
-      case Mood.focused:
-        return l10n.moodFocusedLabel;
-      case Mood.grateful:
-        return l10n.moodGratefulLabel;
-      case Mood.confident:
-        return l10n.moodConfidentLabel;
-    }
-  }
-
-  String _moodDescription(AppLocalizations l10n, Mood mood) {
-    switch (mood) {
-      case Mood.calm:
-        return l10n.moodCalmDescription;
-      case Mood.focused:
-        return l10n.moodFocusedDescription;
-      case Mood.grateful:
-        return l10n.moodGratefulDescription;
-      case Mood.confident:
-        return l10n.moodConfidentDescription;
+      case Mood.great:
+        return l10n.moodGreatLabel;
+      case Mood.good:
+        return l10n.moodGoodLabel;
+      case Mood.neutral:
+        return l10n.moodNeutralLabel;
+      case Mood.tired:
+        return l10n.moodTiredLabel;
+      case Mood.anxious:
+        return l10n.moodAnxiousLabel;
     }
   }
 
@@ -122,6 +96,7 @@ class _HomeScreenState extends State<HomeScreen>
         homeLabel: l10n.navHome,
         meditateLabel: l10n.navMeditate,
         manifestLabel: l10n.navManifest,
+        favoritesLabel: l10n.navFavorites,
         profileLabel: l10n.navProfile,
       ),
       body: AmbientBackground(
@@ -135,22 +110,28 @@ class _HomeScreenState extends State<HomeScreen>
                 child: ListView(
                   padding: const EdgeInsets.fromLTRB(20, 20, 20, 110),
                   children: <Widget>[
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: const <Widget>[
+                        Icon(Icons.menu_rounded, color: Colors.white70),
+                        Icon(Icons.notifications_none_rounded,
+                            color: Colors.white70),
+                      ],
+                    ),
+                    const SizedBox(height: 24),
                     Text(
-                      l10n.homeTitle,
+                      l10n.homeGreeting,
                       style: Theme.of(context).textTheme.headlineMedium,
                     ),
                     const SizedBox(height: 6),
                     Text(
-                      l10n.homeSubtitle,
+                      l10n.moodSelectorTitle,
                       style: Theme.of(context).textTheme.bodyMedium,
                     ),
                     const SizedBox(height: 18),
                     MoodSelector(
                       selectedMood: _selectedMood,
-                      title: l10n.moodSelectorTitle,
                       moodLabelBuilder: (Mood mood) => _moodLabel(l10n, mood),
-                      moodDescriptionBuilder: (Mood mood) =>
-                          _moodDescription(l10n, mood),
                       onChanged: (Mood mood) =>
                           setState(() => _selectedMood = mood),
                     ),
@@ -161,11 +142,13 @@ class _HomeScreenState extends State<HomeScreen>
                         key: ValueKey<String>(affirmations[affirmationIndex]),
                         title: l10n.affirmationCardTitle,
                         message: affirmations[affirmationIndex],
+                        actionLabel: l10n.affirmationAction,
                       ),
                     ),
                     const SizedBox(height: 14),
                     MeditationCategories(
                       title: l10n.meditationCategoriesTitle,
+                      viewAllLabel: l10n.viewAll,
                       categories: categories,
                     ),
                   ],

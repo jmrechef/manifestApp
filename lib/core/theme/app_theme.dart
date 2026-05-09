@@ -24,8 +24,13 @@ class AppTheme {
       ),
       textTheme: const TextTheme(
         headlineMedium: TextStyle(
-          fontWeight: FontWeight.w700,
+          fontWeight: FontWeight.w600,
+          fontSize: 44,
           letterSpacing: 0.2,
+          color: AppColors.textPrimary,
+        ),
+        headlineSmall: TextStyle(
+          fontWeight: FontWeight.w500,
           color: AppColors.textPrimary,
         ),
         titleLarge: TextStyle(
@@ -44,11 +49,23 @@ class AppTheme {
       navigationBarTheme: NavigationBarThemeData(
         backgroundColor: AppColors.surface.withOpacity(0.82),
         indicatorColor: AppColors.accent.withOpacity(0.25),
+        iconTheme: MaterialStateProperty.resolveWith<IconThemeData?>(
+          (Set<MaterialState> states) {
+            final bool selected = states.contains(MaterialState.selected);
+            return IconThemeData(
+              color:
+                  selected ? const Color(0xFFFFA4C7) : AppColors.textSecondary,
+              size: 22,
+            );
+          },
+        ),
         labelTextStyle: MaterialStateProperty.resolveWith<TextStyle?>(
           (Set<MaterialState> states) {
             final bool selected = states.contains(MaterialState.selected);
             return TextStyle(
-              color: selected ? AppColors.textPrimary : AppColors.textSecondary,
+              color:
+                  selected ? const Color(0xFFFFA4C7) : AppColors.textSecondary,
+              fontSize: 12,
               fontWeight: selected ? FontWeight.w600 : FontWeight.w500,
             );
           },
