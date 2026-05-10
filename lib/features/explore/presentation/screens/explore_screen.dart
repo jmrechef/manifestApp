@@ -77,77 +77,74 @@ class _ExploreScreenState extends State<ExploreScreen> {
   Widget build(BuildContext context) {
     final List<_ExploreItem> items = _filteredItems;
 
-    return Scaffold(
-      body: AmbientBackground(
-        child: SafeArea(
-          child: ListView(
-            padding: const EdgeInsets.fromLTRB(20, 20, 20, 24),
-            children: <Widget>[
-              Text(
-                'Explore your inner world',
-                style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                      fontWeight: FontWeight.w700,
-                    ),
-              ),
-              const SizedBox(height: 8),
-              Text(
-                'Curated premium sessions for calm, clarity and manifestation.',
-                style: Theme.of(context).textTheme.bodyMedium,
-              ),
-              const SizedBox(height: 18),
-              const ExploreSearchBar(
-                  hintText: 'Search sessions, collections...'),
-              const SizedBox(height: 14),
-              ExploreFilterChips(
-                filters: _filters,
-                selectedFilter: _selectedFilter,
-                onFilterSelected: (String filter) {
-                  setState(() => _selectedFilter = filter);
-                },
-              ),
-              const SizedBox(height: 16),
-              const FeaturedCollectionCard(
-                title: 'Cinematic Manifestation Collection',
-                subtitle: '7 premium tracks for your next identity shift.',
-                actionLabel: 'Open',
-              ),
-              const SizedBox(height: 16),
-              SizedBox(
-                height: 220,
-                child: AnimatedSwitcher(
-                  duration: const Duration(milliseconds: 280),
-                  child: ListView.separated(
-                    key: ValueKey<String>(_selectedFilter),
-                    scrollDirection: Axis.horizontal,
-                    itemCount: items.length,
-                    separatorBuilder: (_, __) => const SizedBox(width: 12),
-                    itemBuilder: (BuildContext context, int index) {
-                      final _ExploreItem item = items[index];
-                      return PremiumContentCard(
-                        title: item.title,
-                        category: item.category,
-                        duration: item.duration,
-                        isPremium: item.isPremium,
-                        gradient: item.gradient,
-                        onTap: () {
-                          final Uri uri = Uri(
-                            path: AppRoutes.contentDetail,
-                            queryParameters: <String, String>{
-                              'title': item.title,
-                              'category': item.category,
-                              'duration': item.duration,
-                              'isPremium': item.isPremium.toString(),
-                            },
-                          );
-                          context.go(uri.toString());
-                        },
-                      );
-                    },
+    return AmbientBackground(
+      child: SafeArea(
+        child: ListView(
+          padding: const EdgeInsets.fromLTRB(20, 20, 20, 120),
+          children: <Widget>[
+            Text(
+              'Explore your inner world',
+              style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                    fontWeight: FontWeight.w700,
                   ),
+            ),
+            const SizedBox(height: 8),
+            Text(
+              'Curated premium sessions for calm, clarity and manifestation.',
+              style: Theme.of(context).textTheme.bodyMedium,
+            ),
+            const SizedBox(height: 18),
+            const ExploreSearchBar(hintText: 'Search sessions, collections...'),
+            const SizedBox(height: 14),
+            ExploreFilterChips(
+              filters: _filters,
+              selectedFilter: _selectedFilter,
+              onFilterSelected: (String filter) {
+                setState(() => _selectedFilter = filter);
+              },
+            ),
+            const SizedBox(height: 16),
+            const FeaturedCollectionCard(
+              title: 'Cinematic Manifestation Collection',
+              subtitle: '7 premium tracks for your next identity shift.',
+              actionLabel: 'Open',
+            ),
+            const SizedBox(height: 16),
+            SizedBox(
+              height: 220,
+              child: AnimatedSwitcher(
+                duration: const Duration(milliseconds: 280),
+                child: ListView.separated(
+                  key: ValueKey<String>(_selectedFilter),
+                  scrollDirection: Axis.horizontal,
+                  itemCount: items.length,
+                  separatorBuilder: (_, __) => const SizedBox(width: 12),
+                  itemBuilder: (BuildContext context, int index) {
+                    final _ExploreItem item = items[index];
+                    return PremiumContentCard(
+                      title: item.title,
+                      category: item.category,
+                      duration: item.duration,
+                      isPremium: item.isPremium,
+                      gradient: item.gradient,
+                      onTap: () {
+                        final Uri uri = Uri(
+                          path: AppRoutes.contentDetail,
+                          queryParameters: <String, String>{
+                            'title': item.title,
+                            'category': item.category,
+                            'duration': item.duration,
+                            'isPremium': item.isPremium.toString(),
+                          },
+                        );
+                        context.go(uri.toString());
+                      },
+                    );
+                  },
                 ),
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
