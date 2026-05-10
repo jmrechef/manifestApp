@@ -70,7 +70,18 @@ class ContentDetailScreen extends StatelessWidget {
               const SizedBox(height: 14),
               ContentDetailActions(
                 startLabel: 'Start session',
-                onStart: () => context.go(AppRoutes.player),
+                onStart: () {
+                  final Uri uri = Uri(
+                    path: AppRoutes.player,
+                    queryParameters: <String, String>{
+                      'title': title,
+                      'category': category,
+                      'duration': duration,
+                      'isPremium': isPremium.toString(),
+                    },
+                  );
+                  context.go(uri.toString());
+                },
               ),
             ],
           ),

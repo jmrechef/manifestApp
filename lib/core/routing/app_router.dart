@@ -39,7 +39,16 @@ GoRouter buildAppRouter() {
       ),
       GoRoute(
         path: AppRoutes.player,
-        builder: (_, __) => const PlayerScreen(),
+        builder: (_, GoRouterState state) {
+          final Map<String, String> q =
+              Uri.parse(state.location).queryParameters;
+          return PlayerScreen(
+            title: q['title'] ?? 'Deep Manifestation',
+            category: q['category'] ?? 'Meditations',
+            duration: q['duration'] ?? '10 min',
+            isPremium: (q['isPremium'] ?? 'false').toLowerCase() == 'true',
+          );
+        },
       ),
       GoRoute(
         path: AppRoutes.profile,

@@ -33,7 +33,7 @@ class PlayerInfo extends StatelessWidget {
             ),
             child: Text(
               category.toUpperCase(),
-              style: TextStyle(
+              style: const TextStyle(
                 color: AppColors.accent,
                 fontSize: 10,
                 fontWeight: FontWeight.w700,
